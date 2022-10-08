@@ -13,17 +13,29 @@ const App = () => {
 
     const [selected, setSelected] = useState(0)
 
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * max);
-    }
+    const getRandomInt = (max) => Math.floor(Math.random() * max)
 
-    const handleSelection = () => {
-        setSelected(getRandomInt(7))
+    const handleSelection = () => setSelected(getRandomInt(7))
+
+    const [points, setPoints] = useState([])
+   
+    const handleVote = () => setPoints(points.concat(selected))
+
+    const selectedVotes = () => {
+        let count = 0
+
+        points.forEach(value => {
+            if (value === selected) count = count + 1
+        })
+        
+        return count
     }
 
     return (
         <div>
             <p>{anecdotes[selected]}</p>
+            <p>has {selectedVotes()} votes</p>
+            <button onClick={() => handleVote()}>vote</button>
             <button onClick={() => handleSelection() }>next anecdote</button>
         </div>
     )
