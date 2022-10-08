@@ -26,6 +26,18 @@ const Feedbacks = ({ text, result }) => {
     )
 }
 
+const Statistic = ({ text, calculation }) => <p>{text} {calculation}</p>
+
+const Statistics = ({ text, calculation }) => {
+    return (
+        <div>
+            <Statistic text={text[0]} calculation={calculation[0]} />
+            <Statistic text={text[1]} calculation={calculation[1]} />
+            <Statistic text={text[2]} calculation={calculation[2]} />
+        </div>
+    )
+}
+
 const App = () => {
     // save clicks of each button to its own state
     const [good, setGood] = useState(0)
@@ -36,12 +48,17 @@ const App = () => {
     const neutralText = "neutral"
     const badText = "bad"
 
+    const all = () => good + neutral + bad
+    const average = () => (good - bad) / all()
+    const positive = () => good / all() * 100
+
     return (
         <div>
             <Header text="give feedback" />
             <Buttons text={[goodText, neutralText, badText]} handleClick={[() => setGood(good + 1), () => setNeutral(neutral + 1), () => setBad(bad + 1)]}/>
             <Header text="statistics" />
             <Feedbacks text={[goodText, neutralText, badText]} result={[good, neutral, bad]} />
+            <Statistics text={["all", "average", "positive"]} calculation={[all(), average(), positive()]} />
         </div>
     )
 }
