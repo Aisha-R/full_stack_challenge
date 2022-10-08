@@ -26,14 +26,32 @@ const Feedbacks = ({ text, result }) => {
     )
 }
 
-const Statistic = ({ text, calculation }) => <p>{text} {calculation}</p>
+const Statistic = ({ measure, calculation }) => <p>{measure} {calculation}</p>
 
-const Statistics = ({ text, calculation }) => {
+const Statistics = ({ measure, calculation }) => {
     return (
         <div>
-            <Statistic text={text[0]} calculation={calculation[0]} />
-            <Statistic text={text[1]} calculation={calculation[1]} />
-            <Statistic text={text[2]} calculation={calculation[2]} />
+            <Statistic measure={measure[0]} calculation={calculation[0]} />
+            <Statistic measure={measure[1]} calculation={calculation[1]} />
+            <Statistic measure={measure[2]} calculation={calculation[2]} />
+        </div>
+    )
+}
+
+const History = ({ text, result, measure, calculation }) => {
+    
+    if (calculation[0] === 0) {
+        return (
+            <div>
+                <p>No feedback given</p>
+            </div>
+        )
+    } 
+    
+    return (
+        <div>
+            <Feedbacks text={text} result={result} />
+            <Statistics measure={measure} calculation={calculation} />
         </div>
     )
 }
@@ -51,14 +69,13 @@ const App = () => {
     const all = () => good + neutral + bad
     const average = () => (good - bad) / all()
     const positive = () => good / all() * 100
-
+   
     return (
         <div>
             <Header text="give feedback" />
             <Buttons text={[goodText, neutralText, badText]} handleClick={[() => setGood(good + 1), () => setNeutral(neutral + 1), () => setBad(bad + 1)]}/>
             <Header text="statistics" />
-            <Feedbacks text={[goodText, neutralText, badText]} result={[good, neutral, bad]} />
-            <Statistics text={["all", "average", "positive"]} calculation={[all(), average(), positive()]} />
+            <History text={[goodText, neutralText, badText]} result={[good, neutral, bad]} measure={["all", "average", "positive"]} calculation={[all(), average(), positive()]} />
         </div>
     )
 }
