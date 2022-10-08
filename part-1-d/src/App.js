@@ -14,27 +14,27 @@ const Buttons = ({ text, handleClick }) => {
     )
 }
 
-const Feedback = ({ text, result }) => <p>{ text } { result }</p>
+const Feedback = ({ text, result }) => <tr><td>{text}</td><td>{result}</td></tr>
 
 const Feedbacks = ({ text, result }) => {
     return (
-        <div>
+        <>
             <Feedback text={ text[0] } result={ result[0] } />
             <Feedback text={ text[1] } result={ result[1] } />
             <Feedback text={ text[2] } result={ result[2] } />
-        </div>
+        </>
     )
 }
 
-const StatisticLine = ({ measure, calculation }) => <p>{ measure } { calculation }</p>
+const StatisticLine = ({ measure, calculation }) => <tr><td>{measure}</td><td>{calculation}</td></tr>
 
 const Statistics = ({ measure, calculation }) => {
     return (
-        <div>
+        <>
             <StatisticLine measure={ measure[0] } calculation={ calculation[0] } />
             <StatisticLine measure={ measure[1] } calculation={ calculation[1] } />
             <StatisticLine measure={ measure[2] } calculation={ calculation[2] } />
-        </div>
+        </>
     )
 }
 
@@ -50,8 +50,12 @@ const History = ({ text, result, measure, calculation }) => {
     
     return (
         <div>
-            <Feedbacks text={ text } result={ result } />
-            <Statistics measure={ measure } calculation={ calculation } />
+            <table>
+                <tbody>
+                    <Feedbacks text={ text } result={ result } />
+                    <Statistics measure={measure} calculation={calculation} />
+                </tbody>
+            </table>
         </div>
     )
 }
