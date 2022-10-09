@@ -7,12 +7,19 @@ const Part = ({ part }) => {
 }
 
 const Parts = ({ parts }) => {
+    let total = 0
+
+    parts.map(part => total = total + part.exercises)
+
     return (
-        <ul>
-            {parts.map(part =>
-                <Part key={part.id} part={ part } />
-            )}
-        </ul>
+        <div>
+            <ul>
+                {parts.map(part =>
+                    <Part key={part.id} part={ part } />
+                )}
+            </ul>
+            <p>total of { total } exercises</p>
+        </div>
     )
 }
 
@@ -44,6 +51,11 @@ const App = () => {
                 name: 'State of a component',
                 exercises: 14,
                 id: 3
+            },
+            {
+                name: 'Redux',
+                exercises: 11,
+                id: 4
             }
         ]
     }
