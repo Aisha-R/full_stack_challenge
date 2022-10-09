@@ -7,9 +7,9 @@ const Part = ({ part }) => {
 }
 
 const Parts = ({ parts }) => {
-    let total = 0
-
-    parts.map(part => total = total + part.exercises)
+    const arr = parts.map(part => part.exercises)
+   
+    const total = arr.reduce((previous, current) => previous + current)
 
     return (
         <div>
