@@ -4,8 +4,48 @@ const Person = ({ person }) => {
     return <p>{person['name']} {person['number']}</p>
 }
 
+const Persons = ({ persons }) => {
+    return (
+        <div>
+            {persons.map(person =>
+                <Person key={person['id']} person={person} />
+            )}
+        </div>
+    )
+}
+
+const PersonForm = ({ handleForm, newName, handleNameInput, newNumber, handleNumberInput }) => {
+    return (
+        <div>
+            <form onSubmit={handleForm}>
+                <div>
+                    name: <input value={newName} onChange={handleNameInput} />
+                </div>
+                <div>
+                    number: <input value={newNumber} onChange={handleNumberInput} />
+                </div>
+                <div>
+                    <button type="submit">add</button>
+                </div>
+            </form>
+        </div>
+    )
+}
+
 const Result = ({ searchResult }) => {
     return <p>{searchResult['name']} {searchResult['number']}</p>
+}
+
+const Filter = ({ handleSearch, searchResults }) => {
+    return (
+        <div>
+            <h2>search</h2>
+            <input onChange={handleSearch} />
+            {searchResults.map(searchResult =>
+                <Result key={searchResult['id']} searchResult={searchResult} />
+            )}
+        </div>
+    )
 }
 
 const App = () => {
@@ -54,27 +94,11 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
-            <h2>search</h2>
-            <input onChange={ handleSearch }/>
+            <Filter handleSearch={ handleSearch }  searchResults={ searchResults } />
             <h2>add a new</h2>
-            {searchResults.map(searchResult =>
-                <Result key={ searchResult['id'] } searchResult={ searchResult } />
-            )}
-            <form onSubmit={ handleForm }>
-                <div>
-                    name: <input value={ newName } onChange={ handleNameInput }/>
-                </div>
-                <div>
-                    number: <input value={ newNumber } onChange={ handleNumberInput } />
-                </div>
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
+            <PersonForm handleForm={ handleForm } newName={ newName } handleNameInput={ handleNameInput } newNumber={ newNumber } handleNumberInput={ handleNumberInput }/>
             <h2>Numbers</h2>
-            {persons.map(person =>
-                <Person key={ person['id'] } person={ person }/>
-            )}
+            <Persons persons={ persons } />
         </div>
     )
 }
