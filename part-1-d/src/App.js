@@ -20,7 +20,7 @@ const App = () => {
     ]
 
     const [selected, setSelected] = useState(0)
-
+    
     const getRandomInt = (max) => Math.floor(Math.random() * max)
     
     const handleSelection = () => setSelected(getRandomInt(anecdotes.length))
