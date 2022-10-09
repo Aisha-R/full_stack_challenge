@@ -12,9 +12,22 @@ const App = () => {
 
     const handleForm = (event) => {
         event.preventDefault()
-        const newPerson = { 'name': newName }
-        setPersons(persons.concat(newPerson))
-        setNewName('')
+
+        const found = persons.map(person => person['name'] === newName)
+
+        const duplicate = found.find(match => true)
+
+        if (!duplicate) {
+
+            const newPerson = { 'name': newName }
+            setPersons(persons.concat(newPerson))
+            setNewName('')
+
+        } else {
+
+            setNewName('')
+            alert(`${newName} is already added to phonebook`)
+        }
     }
 
     const handleInput = (event) => setNewName(event.target.value)
