@@ -1,4 +1,7 @@
-const Search = ({ handleSearch }) => {
+const Search = ({ setSearch }) => {
+
+    const handleSearch = (event) => setSearch(event.target.value)
+
     return (
         <>
             <label>find countries</label>

@@ -1,9 +1,20 @@
-const Language = ({ language }) => {
-    return <><li>{language}</li></>
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+const Weather = ({ result, weather }) => {
+    return (
+        <div>
+            <img src={result['flags']['png']} alt={result['name']['common']} />
+            <h3>Weather in {result['capital']}</h3>
+            <p>temperature {weather['main']['temp']} Celsius</p>
+            <img src={`http://openweathermap.org/img/wn/${weather['weather'][0]['icon']}@2x.png`} alt="Weather Icon" />
+            <p>wind {weather['wind']['speed']} m/s</p>
+        </div>
+    )
 }
 
-const Single = ({ result }) => {
-    
+const Information = ({ result }) => {
+
     const languages = []
 
     const obj = result['languages']
@@ -13,20 +24,47 @@ const Single = ({ result }) => {
     }
 
     return (
-        <div>
-            <h3>{result['name']['official']}</h3>
+        <>
+            <h2>{result['name']['official']}</h2>
             <p>capital {result['capital']}</p>
             <p>area {result['area']}</p>
-            <p>languages:</p>
+            <p>language(s):</p>
             <ul>
                 {languages.map(language =>
-                    <Language key={language} language={language} />
+                    <li key={language}>{language}</li>
                 )}
             </ul>
-            <img src={result['flags']['png']} alt={result['name']['common']} />
-
-        </div>
+        </>
     )
+}
+
+const Single = ({ result }) => {
+
+    const [weather, setWeather] = useState({})
+
+    useEffect(() => {
+        const api_key = process.env.REACT_APP_API_KEY_2
+        const lat = result['latlng'][0]
+        const lon = result['latlng'][1]
+        
+        axios
+            .get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${api_key}`)
+            .then(response => {
+                setWeather(response['data'])
+                
+            }).catch(error => {
+                console.log(error)
+            })
+    })
+
+    const show = Object.keys(weather).length > 0
+   
+        return (
+            <div>
+                <Information result={result}/>
+                {show ? <Weather result={result} weather={weather}/> : <p>Weather information loading</p>}
+            </div>
+        )
 }
 
 export default Single

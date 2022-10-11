@@ -10,8 +10,6 @@ const App = () => {
     const [search, setSearch] = useState('')
     const [results, setResults] = useState([])
 
-    const handleSearch = (event) => setSearch(event.target.value)
-
     useEffect(() => {
         axios
             .get('https://restcountries.com/v3.1/all').then(response => {
@@ -30,7 +28,7 @@ const App = () => {
 
         return (
             <div>
-                <Search handleSearch={handleSearch} />
+                <Search setSearch={setSearch} />
                 <p>Too many matches, specify another filter</p>
             </div>
         )
@@ -39,7 +37,7 @@ const App = () => {
 
         return (
             <div>
-                <Search handleSearch={handleSearch} />
+                <Search setSearch={setSearch} />
                 <Multiple results={results} />
             </div>
         )
@@ -48,7 +46,7 @@ const App = () => {
 
         return (
             <div>
-                <Search handleSearch={handleSearch} />
+                <Search setSearch={setSearch} />
                 <Single result={results[0]} />
             </div>
         )
@@ -57,7 +55,7 @@ const App = () => {
 
         return (
             <div>
-                <Search handleSearch={handleSearch} />
+                <Search setSearch={setSearch} />
                 <p>No search results</p>
             </div>
         )
