@@ -1,6 +1,6 @@
 import personService from '../services/persons'
 
-const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber }) => {
+const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setMessage }) => {
 
     const handleNameInput = (event) => setNewName(event.target.value)
     const handleNumberInput = (event) => setNewNumber(event.target.value)
@@ -17,9 +17,16 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
             personService
                 .create(newPerson)
                 .then(createdPerson => {
+
+                    setMessage(`'${createdPerson['name']}' has been added to your contacts`)
+
+                    setTimeout(() => {
+                        setMessage(null)
+                        }, 5000)
+
                     setPersons(persons.concat(createdPerson))
                     setNewName('')
-                    setNewNumber('')
+                    setNewNumber('')    
                 })
 
         } else {

@@ -17,7 +17,7 @@ const Person = ({ persons, setPersons }) => {
         <div>
             {persons.map(person => {
                 return (
-                    <div>
+                    <div key={person['name']}>
                         <p>{person['name']} {person['number']}</p>
                         <button onClick={() => handleDelete(person)}>delete</button>
                     </div>
