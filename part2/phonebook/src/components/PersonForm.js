@@ -1,6 +1,6 @@
 import personService from '../services/persons'
 
-const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setMessage }) => {
+const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber, setMessage, setError }) => {
 
     const handleNameInput = (event) => setNewName(event.target.value)
     const handleNumberInput = (event) => setNewNumber(event.target.value)
@@ -18,6 +18,7 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
                 .create(newPerson)
                 .then(createdPerson => {
 
+                    setError(false)
                     setMessage(`'${createdPerson['name']}' has been added to your contacts`)
 
                     setTimeout(() => {
@@ -39,6 +40,11 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
                         setPersons(persons.map(person => person['id'] !== updated['id'] ? person : updated))
                         setNewName('')
                         setNewNumber('')
+                    })
+                    .catch(error => {
+                        setError(true)
+                        setMessage(`${newName} is no longer saved in your contacts`)
+                        setPersons(persons.filter(person => person['id'] !== found['id']))
                     })
             }
         }

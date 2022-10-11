@@ -1,4 +1,4 @@
-const Notification = ({ message }) => {
+const Notification = ({ message, error }) => {
     
     if (message === null || message === undefined) {
         return null
@@ -13,8 +13,12 @@ const Notification = ({ message }) => {
         marginBottom: 10
     }
 
+    if (error) {
+        style['color'] = 'red'
+    }
+
     return (
-        <div className='error' style={style}>
+        <div style={style}>
             {message}
         </div>
     )
