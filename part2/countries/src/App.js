@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import Multiple from './components/Multiple'
 import Single from './components/Single'
 import Search from './components/Search'
 
@@ -39,7 +40,7 @@ const App = () => {
         return (
             <div>
                 <Search handleSearch={handleSearch} />
-                {results.map(result => <p key={result['name']['official']}>{result['name']['common']}</p>)}
+                <Multiple results={results} />
             </div>
         )
 

@@ -3,7 +3,7 @@ const Language = ({ language }) => {
 }
 
 const Single = ({ result }) => {
-
+    
     const languages = []
 
     const obj = result['languages']
