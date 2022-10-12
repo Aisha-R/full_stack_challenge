@@ -56,7 +56,7 @@ const App = () => {
         return (
             <div>
                 <Search setSearch={setSearch} />
-                <p>No search results</p>
+                <p>Type to see results</p>
             </div>
         )
     }

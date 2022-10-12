@@ -41,7 +41,7 @@ const Information = ({ result }) => {
 const Single = ({ result }) => {
 
     const [weather, setWeather] = useState({})
-
+    
     useEffect(() => {
         const api_key = process.env.REACT_APP_API_KEY_2
         const lat = result['latlng'][0]
