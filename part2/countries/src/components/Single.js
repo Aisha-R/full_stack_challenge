@@ -4,8 +4,7 @@ import axios from 'axios'
 const Weather = ({ result, weather }) => {
     return (
         <div>
-            <img src={result['flags']['png']} alt={result['name']['common']} />
-            <h3>Weather in {result['capital']}</h3>
+            <h3>Weather in {weather['capital']}</h3>
             <p>temperature {weather['main']['temp']} Celsius</p>
             <img src={`http://openweathermap.org/img/wn/${weather['weather'][0]['icon']}@2x.png`} alt="Weather Icon" />
             <p>wind {weather['wind']['speed']} m/s</p>
@@ -34,6 +33,7 @@ const Information = ({ result }) => {
                     <li key={language}>{language}</li>
                 )}
             </ul>
+            <img src={result['flags']['png']} alt={result['name']['common']} />
         </>
     )
 }
