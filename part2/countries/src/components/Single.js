@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Weather = ({ result, weather }) => {
+const Weather = ({ capital, weather }) => {
     return (
         <div>
-            <h3>Weather in {weather['capital']}</h3>
+            <h3>Weather in {capital}</h3>
             <p>temperature {weather['main']['temp']} Celsius</p>
             <img src={`http://openweathermap.org/img/wn/${weather['weather'][0]['icon']}@2x.png`} alt="Weather Icon" />
             <p>wind {weather['wind']['speed']} m/s</p>
@@ -43,7 +43,7 @@ const Single = ({ result }) => {
     const [weather, setWeather] = useState({})
     
     useEffect(() => {
-        const api_key = process.env.REACT_APP_API_KEY_2
+        const api_key = process.env.REACT_APP_API_KEY
         const lat = result['latlng'][0]
         const lon = result['latlng'][1]
         
@@ -62,7 +62,7 @@ const Single = ({ result }) => {
         return (
             <div>
                 <Information result={result}/>
-                {show ? <Weather result={result} weather={weather}/> : <p>Weather information loading</p>}
+                {show ? <Weather capital={result['capital']} weather={weather}/> : <p>Weather data is unavailable</p>}
             </div>
         )
 }
