@@ -1,36 +1,10 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
+const { initialBlogs, blogsInDb } = require('./test_helper')
 const Blog = require('../models/Blog')
 
 const api = supertest(app)
-
-const initialBlogs = [
-    {
-        _id: "5a422a851b54a676234d17f7",
-        title: "React patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
-        likes: 7,
-        __v: 0
-    },
-    {
-        _id: "5a422aa71b54a676234d17f8",
-        title: "Go To Statement Considered Harmful",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-        likes: 5,
-        __v: 0
-    },
-    {
-        _id: "5a422ba71b54a676234d17fb",
-        title: "TDD harms architecture",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-        likes: 0,
-        __v: 0
-    }
-]
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -42,84 +16,112 @@ beforeEach(async () => {
     await blogObject.save()
 })
 
-test('three blogs are returned as json', async () => {
-    const response = await api
-        .get('/api/blogs')
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
+describe('primarily testing GET requests', () => {
 
-    expect(response.body).toHaveLength(initialBlogs.length)
-})
+    test('three blogs are returned as json', async () => {
+        const response = await api
+            .get('/api/blogs')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
 
-test('unique identifier property of the blog posts is named id', async () => {
-    const response = await api.get('/api/blogs')
-
-    response.body.forEach(blog => {
-        expect(blog.id).toBeDefined()
+        expect(response.body).toHaveLength(initialBlogs.length)
     })
+
+    test('unique identifier property of the blog posts is named id', async () => {
+        const response = await api.get('/api/blogs')
+
+        response.body.forEach(blog => {
+            expect(blog.id).toBeDefined()
+        })
+    })
+
 })
 
-test('new blog created, bloglist lenght increases by 1', async () => {
+describe('primarily testing POST requests', () => {
 
-    const newBlog = {
-        title: "Canonical string reduction",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-        likes: 12
-    }
+    test('new blog created, bloglist lenght increases by 1', async () => {
 
-    await api.post('/api/blogs')
-        .send(newBlog)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
+        const newBlog = {
+            title: "Canonical string reduction",
+            author: "Edsger W. Dijkstra",
+            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+            likes: 12
+        }
 
-    const response = await api.get('/api/blogs')
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
 
-    const titles = response.body.map(blog => blog.title)
+        const blogsAtEnd = await blogsInDb()
 
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
-    expect(titles).toContain(
-        'Canonical string reduction'
-    )
+        const titles = blogsAtEnd.map(blog => blog.title)
+
+        expect(blogsAtEnd).toHaveLength(initialBlogs.length + 1)
+        expect(titles).toContain(
+            'Canonical string reduction'
+        )
+    })
+
+    test('new blog created without likes field, likes field set to 0', async () => {
+
+        const newBlog = {
+            title: "Canonical string reduction",
+            author: "Edsger W. Dijkstra",
+            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html"
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+
+        const blogsAtEnd = await blogsInDb()
+
+        expect(blogsAtEnd[initialBlogs.length].likes).toBe(0)
+    })
+
+    test('new blog created without title and/or url field, response returns 400 status code', async () => {
+
+        const newBlog = {
+            title: "Canonical string reduction",
+            author: "Edsger W. Dijkstra",
+            url: ""
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+
+        const newBlog2 = {
+            title: "",
+            author: "Edsger W. Dijkstra",
+            url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html"
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog2)
+            .expect(400)
+    })
+
 })
 
-test('new blog created without likes field, likes field set to 0', async () => {
+describe('primarily testing DELETE requests', () => {
 
-    const newBlog = {
-        title: "Canonical string reduction",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html"
-    }
+    test('delete blog, response returns 204 status code', async () => {
+        const blogsAtStart = await blogsInDb()
+        const blogToDelete = blogsAtStart[0]
 
-    await api.post('/api/blogs')
-        .send(newBlog)
+        await api
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
 
-    const response = await api.get('/api/blogs')
+        const blogsAtEnd = await blogsInDb()
 
-    expect(response.body[initialBlogs.length].likes).toBe(0)
-})
+        expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
 
-test('new blog created without title and/or url field, response returns 400 status code', async () => {
+        const titles = blogsAtEnd.map(blog => blog.title)
 
-    const newBlog = {
-        title: "Canonical string reduction",
-        author: "Edsger W. Dijkstra",
-        url: ""
-    }
-
-    await api.post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
-
-    const newBlog2 = {
-        title: "",
-        author: "Edsger W. Dijkstra",
-        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html"
-    }
-
-    await api.post('/api/blogs')
-        .send(newBlog2)
-        .expect(400)
+        expect(titles).not.toContain(blogToDelete.title)
+    })
 })
 
 afterAll(() => {
