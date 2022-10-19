@@ -59,7 +59,7 @@ test('unique identifier property of the blog posts is named id', async () => {
     })
 })
 
-test.only('new blog created, bloglist lenght increases by 1', async () => {
+test('new blog created, bloglist lenght increases by 1', async () => {
 
     const newBlog = {
         title: "Canonical string reduction",
@@ -81,6 +81,22 @@ test.only('new blog created, bloglist lenght increases by 1', async () => {
     expect(titles).toContain(
         'Canonical string reduction'
     )
+})
+
+test('new blog created without likes field, likes field set to 0', async () => {
+
+    const newBlog = {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html"
+    }
+
+    await api.post('/api/blogs')
+        .send(newBlog)
+
+    const response = await api.get('/api/blogs')
+
+    expect(response.body[initialBlogs.length].likes).toBe(0)
 })
 
 afterAll(() => {
