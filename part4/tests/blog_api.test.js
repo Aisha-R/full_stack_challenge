@@ -99,6 +99,29 @@ test('new blog created without likes field, likes field set to 0', async () => {
     expect(response.body[initialBlogs.length].likes).toBe(0)
 })
 
+test('new blog created without title and/or url field, response returns 400 status code', async () => {
+
+    const newBlog = {
+        title: "Canonical string reduction",
+        author: "Edsger W. Dijkstra",
+        url: ""
+    }
+
+    await api.post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+
+    const newBlog2 = {
+        title: "",
+        author: "Edsger W. Dijkstra",
+        url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html"
+    }
+
+    await api.post('/api/blogs')
+        .send(newBlog2)
+        .expect(400)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
