@@ -27,17 +27,6 @@ const favouriteBlog = (blogs) => {
     return { title, author, likes }
 }
 
-const listWithOneBlog = [
-    {
-        _id: '5a422aa71b54a676234d17f8',
-        title: 'Go To Statement Considered Harmful',
-        author: 'Edsger W. Dijkstra',
-        url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-        likes: 5,
-        __v: 0
-    }
-]
-
 const mostBlogs = (blogs) => {
 
     if (blogs.length === 0) {
@@ -69,9 +58,41 @@ const mostBlogs = (blogs) => {
     return author
 }
 
+const mostLikes = (blogs) => {
+
+    if (blogs.length === 0) {
+        return null
+    }
+
+    const authors = blogs.map(blog => blog.author)
+    const uniqueAuthors = [...new Set(authors)];
+    const count = []
+
+    uniqueAuthors.forEach(author => count.push({ author: author, likes: 0 }))
+
+    blogs.forEach(blog => {
+        count.forEach(obj => {
+            if (obj.author === blog.author) {
+                obj.likes += blog.likes
+            }
+        })
+    })
+    
+    const noOfLikes = count.map(obj => {
+        return obj.likes
+    })
+
+    const maxLikes = Math.max(...noOfLikes)
+
+    const author = count.find(obj => obj.likes === maxLikes)
+    
+    return author
+}
+
 module.exports = {
     dummy,
     totalLikes,
     favouriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
 }
