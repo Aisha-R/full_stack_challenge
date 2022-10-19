@@ -124,6 +124,21 @@ describe('primarily testing DELETE requests', () => {
     })
 })
 
+describe('primarily testing PUT requests', () => {
+
+    test('upvote blog, response returns blog with one more like', async () => {
+        const blogsAtStart = await blogsInDb()
+        const blogToUpdate = blogsAtStart[0]
+
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+
+        const blogsAtEnd = await blogsInDb()
+
+        expect(blogsAtEnd[0].likes).toBe(blogToUpdate.likes + 1)
+    })
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
