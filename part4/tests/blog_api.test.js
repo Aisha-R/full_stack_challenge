@@ -51,6 +51,14 @@ test('three blogs are returned as json', async () => {
     expect(response.body).toHaveLength(initialBlogs.length)
 })
 
+test('unique identifier property of the blog posts is named id', async () => {
+    const response = await api.get('/api/blogs')
+
+    response.body.forEach(blog => {
+        expect(blog.id).toBeDefined()
+    })
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
