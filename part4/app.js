@@ -1,12 +1,15 @@
 const { MONGODB_URI, PORT } = require('./utils/config')
+const middleware = require('./utils/middleware')
+
 const express = require('express')
 require('express-async-errors')
 const app = express()
+
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const blogsRouter = require('./controllers/blogs')
+
 const cors = require('cors')
-const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 
 mongoose.connect(MONGODB_URI)
