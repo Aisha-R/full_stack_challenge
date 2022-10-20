@@ -8,6 +8,7 @@ const initialBlogs = [
         author: "Michael Chan",
         url: "https://reactpatterns.com/",
         likes: 7,
+        user: "635100f9b74358cbff630fa3",
         __v: 0
     },
     {
@@ -16,6 +17,7 @@ const initialBlogs = [
         author: "Edsger W. Dijkstra",
         url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
         likes: 5,
+        user: "63510081b74358cbff630f9f",
         __v: 0
     },
     {
@@ -24,6 +26,7 @@ const initialBlogs = [
         author: "Robert C. Martin",
         url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
         likes: 0,
+        user: "6350faffc1ae323a4d784a25",
         __v: 0
     }
 ]

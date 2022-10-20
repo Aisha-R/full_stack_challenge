@@ -34,7 +34,7 @@ describe('POST request for invalid users', () => {
 
         const usersAtEnd = await usersInDb()
         expect(usersAtEnd).toHaveLength(initialUsers.length)
-    })
+    }, 100000)
 
     test('username missing, response returns "username and/or password missing"', async () => {
 
@@ -52,7 +52,7 @@ describe('POST request for invalid users', () => {
 
         const usersAtEnd = await usersInDb()
         expect(usersAtEnd).toHaveLength(initialUsers.length)
-    })
+    }, 100000)
 
     test('password missing, response returns "username and/or password missing"', async () => {
 
@@ -70,7 +70,7 @@ describe('POST request for invalid users', () => {
 
         const usersAtEnd = await usersInDb()
         expect(usersAtEnd).toHaveLength(initialUsers.length)
-    })
+    }, 100000)
 
     test('password length is <3, response returns "username and/or password length must exceed 2 characters"', async () => {
 
@@ -88,7 +88,7 @@ describe('POST request for invalid users', () => {
 
         const usersAtEnd = await usersInDb()
         expect(usersAtEnd).toHaveLength(initialUsers.length)
-    })
+    }, 100000)
 
     test('username length is <3, response returns "username and/or password length must exceed 2 characters"', async () => {
 
@@ -106,7 +106,7 @@ describe('POST request for invalid users', () => {
 
         const usersAtEnd = await usersInDb()
         expect(usersAtEnd).toHaveLength(initialUsers.length)
-    })
+    }, 100000)
 })
 
 afterAll(() => {
