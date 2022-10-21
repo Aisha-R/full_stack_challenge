@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -15,7 +16,6 @@ const App = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
-    const [blogFormVisible, setBlogFormVisible] = useState(false)
 
     useEffect(() => {
       blogService.getAll().then(blogs =>
@@ -68,8 +68,6 @@ const App = () => {
 
             setBlogs(blogs.concat(blog))
 
-            setBlogFormVisible(false)
-
             setMessage(`a new blog ${title} by ${author} added`)
             setTimeout(() => {
                 setMessage('')
@@ -86,31 +84,6 @@ const App = () => {
         setTitle('')
         setAuthor('')
         setUrl('')
-    }
-
-    const blogForm = () => {
-        const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
-        const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
-
-        return (
-            <div>
-                <div style={hideWhenVisible}>
-                    <button onClick={() => setBlogFormVisible(true)}>show blog form</button>
-                </div>
-                <div style={showWhenVisible}>
-                    <BlogForm
-                        title={title}
-                        author={author}
-                        url={url}
-                        addBlog={addBlog}
-                        handleTitleChange={({ target }) => setTitle(target.value)}
-                        handleAuthorChange={({ target }) => setAuthor(target.value)}
-                        handleUrlChange={({ target }) => setUrl(target.value)}
-                    />
-                    <button onClick={() => setBlogFormVisible(false)}>cancel</button>
-                </div>
-            </div>
-        )
     }
     
   return (
@@ -130,7 +103,19 @@ const App = () => {
                   <div>
                       <p>{user.name} logged-in</p>
                       <button onClick={() => handleLogout()}>Log Out</button>
-                      {blogForm()}
+                      <div>
+                          <Togglable buttonLabel='new blog'>
+                              <BlogForm
+                                  title={title}
+                                  author={author}
+                                  url={url}
+                                  addBlog={addBlog}
+                                  handleTitleChange={({ target }) => setTitle(target.value)}
+                                  handleAuthorChange={({ target }) => setAuthor(target.value)}
+                                  handleUrlChange={({ target }) => setUrl(target.value)}
+                              />
+                          </Togglable>
+                      </div>
                   </div>
               }
           </div>
