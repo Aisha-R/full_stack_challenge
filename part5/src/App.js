@@ -18,9 +18,12 @@ const App = () => {
     const [url, setUrl] = useState('')
 
     useEffect(() => {
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )  
+        blogService.getAll().then(returnedBlogs => {
+
+            let sorted = returnedBlogs.sort((b1, b2) => b1.likes - b2.likes)
+
+            setBlogs(sorted)
+        })  
     }, [])
 
     useEffect(() => {
