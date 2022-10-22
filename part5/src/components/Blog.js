@@ -4,11 +4,8 @@ import Togglable from './Togglable'
 const Blog = ({ blog, blogs, setBlogs, user }) => {
 
     const handleLike = async () => {
-        
         const response = await blogService.update(blog.id)
-        
         const newBlogs = blogs.filter(current => current.id !== blog.id)
-        
         setBlogs(newBlogs.concat(response))
     }
 
@@ -33,7 +30,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     }
 
     const pStyle = { margin: 5 }
-    
+
     return (
         <div style={blogStyle}>
             <p style={pStyle}>{blog.title} {blog.author}</p>
