@@ -32,7 +32,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     const pStyle = { margin: 5 }
 
     return (
-        <div style={blogStyle}>
+        <div style={blogStyle} className="blog">
             <p style={pStyle}>{blog.title} {blog.author}</p>
             <Togglable buttonLabel='view'>
                 <p style={pStyle}>{blog.url}</p>
