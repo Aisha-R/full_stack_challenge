@@ -1,6 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
@@ -32,6 +33,16 @@ describe('<Blog />', () => {
 
         const toggleDiv = container.querySelector('.hiddenInitially')
         expect(toggleDiv).toHaveStyle('display: none')
+    })
+
+    test('after clicking button, children are displayed', async () => {
+
+        const user = userEvent.setup()
+        const button = screen.getByText('view')
+        await user.click(button)
+
+        const toggleDiv = container.querySelector('.hiddenInitially')
+        expect(toggleDiv).not.toHaveStyle('display: none')
     })
 
 })
