@@ -29,15 +29,6 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
                     setNewName('')
                     setNewNumber('')    
                 })
-                .catch(error => {
-                    
-                    setError(true)
-                    setMessage(error.response.data.error)
-
-                    setTimeout(() => {
-                        setMessage(null)
-                    }, 5000)
-                })
 
         } else {
 
@@ -52,17 +43,8 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
                     })
                     .catch(error => {
                         setError(true)
-                        setMessage(error.response.data.error)
-
-                        setTimeout(() => {
-                            setMessage(null)
-                        }, 5000)
-
-                        personService
-                            .getAll()
-                            .then(all => {
-                                setPersons(all)
-                            })
+                        setMessage(`${newName} is no longer saved in your contacts`)
+                        setPersons(persons.filter(person => person['id'] !== found['id']))
                     })
             }
         }
