@@ -7,6 +7,8 @@ import Blog from './Blog'
 describe('<Blog />', () => {
     let container
 
+    let mockHandler
+
     beforeEach(() => {
 
         const blog = {
@@ -21,7 +23,9 @@ describe('<Blog />', () => {
             }
         }
 
-        container = render(<Blog blog={blog} />).container
+        mockHandler = jest.fn()
+
+        container = render(<Blog blog={blog} handleLike={mockHandler} />).container
     })
 
     test('renders content', () => {
@@ -43,6 +47,16 @@ describe('<Blog />', () => {
 
         const toggleDiv = container.querySelector('.hiddenInitially')
         expect(toggleDiv).not.toHaveStyle('display: none')
+    })
+
+    test('like button pressed twice, event handler called twice', async () => {
+
+        const user = userEvent.setup()
+        const button = screen.getByText('like')
+        await user.click(button)
+        await user.click(button)
+
+        expect(mockHandler.mock.calls).toHaveLength(2)
     })
 
 })

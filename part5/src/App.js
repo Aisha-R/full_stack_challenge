@@ -89,6 +89,12 @@ const App = () => {
         setUrl('')
     }
 
+    const handleLike = async () => {
+        const response = await blogService.update(blog.id)
+        const newBlogs = blogs.filter(current => current.id !== blog.id)
+        setBlogs(newBlogs.concat(response))
+    }
+
     return (
         <div>
             <Notification message={message} />
