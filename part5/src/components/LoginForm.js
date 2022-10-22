@@ -3,10 +3,7 @@ const LoginForm = ({
     username,
     handleUsernameChange,
     handlePasswordChange,
-    password,
-    user,
-    setUser,
-    setMessage
+    password
 }) => {
 
     return (
@@ -31,7 +28,7 @@ const LoginForm = ({
                     />
                 </div>
                 <button type="submit">login</button>
-            </form>    
+            </form>
         </>
     )
 }
