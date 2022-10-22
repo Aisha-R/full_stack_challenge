@@ -9,21 +9,21 @@ import loginService from './services/login'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState('') 
     const [user, setUser] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
-
+    
     useEffect(() => {
         blogService.getAll().then(returnedBlogs => {
 
             let sorted = returnedBlogs.sort((b1, b2) => b1.likes - b2.likes)
 
             setBlogs(sorted)
-        })
+        })  
     }, [])
 
     useEffect(() => {
@@ -88,47 +88,46 @@ const App = () => {
         setAuthor('')
         setUrl('')
     }
-
-    return (
-        <div>
-            <Notification message={message} />
-            <div>
-                {user === null ?
-                    <LoginForm
-                        handleLogin={handleLogin}
-                        user={user}
-                        username={username}
-                        password={password}
-                        handleUsernameChange={({ target }) => setUsername(target.value)}
-                        handlePasswordChange={({ target }) => setPassword(target.value)}
-                        setUser={setUser}
-                        setMessage={setMessage}
-                    /> :
-                    <div>
-                        <p>{user.name} logged-in</p>
-                        <button onClick={() => handleLogout()}>Log Out</button>
-                        <div>
-                            <Togglable buttonLabel='new blog'>
-                                <BlogForm
-                                    title={title}
-                                    author={author}
-                                    url={url}
-                                    addBlog={addBlog}
-                                    handleTitleChange={({ target }) => setTitle(target.value)}
-                                    handleAuthorChange={({ target }) => setAuthor(target.value)}
-                                    handleUrlChange={({ target }) => setUrl(target.value)}
-                                />
-                            </Togglable>
-                        </div>
-                    </div>
-                }
-            </div>
-            <h2>blogs</h2>
-            {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
-            )}
-        </div>
-    )
+    
+  return (
+      <div>
+          <Notification message={message} />
+          <div>
+              {user === null ?
+                  <LoginForm
+                      handleLogin={handleLogin}
+                      user={user}
+                      username={username}
+                      password={password}
+                      handleUsernameChange={({ target }) => setUsername(target.value)}
+                      handlePasswordChange={({ target }) => setPassword(target.value)}
+                      setUser={setUser}
+                      setMessage={setMessage} /> :
+                  <div>
+                      <p>{user.name} logged-in</p>
+                      <button onClick={() => handleLogout()}>Log Out</button>
+                      <div>
+                          <Togglable buttonLabel='new blog'>
+                              <BlogForm
+                                  title={title}
+                                  author={author}
+                                  url={url}
+                                  addBlog={addBlog}
+                                  handleTitleChange={({ target }) => setTitle(target.value)}
+                                  handleAuthorChange={({ target }) => setAuthor(target.value)}
+                                  handleUrlChange={({ target }) => setUrl(target.value)}
+                              />
+                          </Togglable>
+                      </div>
+                  </div>
+              }
+          </div>
+          <h2>blogs</h2>
+          {blogs.map(blog =>
+              <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
+          )}
+      </div>
+  )
 }
 
 export default App
