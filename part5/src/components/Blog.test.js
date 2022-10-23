@@ -12,9 +12,9 @@ describe('<Blog />', () => {
     beforeEach(() => {
 
         const blog = {
-            title: 'title',
-            author: 'author',
-            url: 'urls',
+            title: 'First class tests',
+            author: 'Robert C. Martin',
+            url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
             likes: 0,
             user: {
                 name: 'name',
@@ -32,8 +32,8 @@ describe('<Blog />', () => {
 
         const div = container.querySelector('.blog')
 
-        expect(div).toHaveTextContent('title')
-        expect(div).toHaveTextContent('author')
+        expect(div).toHaveTextContent('First class tests')
+        expect(div).toHaveTextContent('Robert C. Martin')
 
         const toggleDiv = container.querySelector('.hiddenInitially')
         expect(toggleDiv).toHaveStyle('display: none')

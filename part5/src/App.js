@@ -13,9 +13,6 @@ const App = () => {
     const [user, setUser] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
 
     useEffect(() => {
         blogService.getAll().then(returnedBlogs => {
@@ -63,15 +60,14 @@ const App = () => {
         setUser(null)
     }
 
-    const addBlog = async (event) => {
-        event.preventDefault()
+    const addBlog = async (returnedBlog) => {
 
         try {
-            const blog = await blogService.create({ title, author, url })
+            const blog = await blogService.create(returnedBlog)
 
             setBlogs(blogs.concat(blog))
 
-            setMessage(`a new blog ${title} by ${author} added`)
+            setMessage(`a new blog ${blog.title} by ${blog.author} added`)
             setTimeout(() => {
                 setMessage('')
             }, 5000)
@@ -83,13 +79,9 @@ const App = () => {
                 setMessage('')
             }, 5000)
         }
-
-        setTitle('')
-        setAuthor('')
-        setUrl('')
     }
 
-    const handleLike = async () => {
+    const handleLike = async (blog) => {
         const response = await blogService.update(blog.id)
         const newBlogs = blogs.filter(current => current.id !== blog.id)
         setBlogs(newBlogs.concat(response))
@@ -116,13 +108,7 @@ const App = () => {
                         <div>
                             <Togglable buttonLabel='new blog'>
                                 <BlogForm
-                                    title={title}
-                                    author={author}
-                                    url={url}
                                     addBlog={addBlog}
-                                    handleTitleChange={({ target }) => setTitle(target.value)}
-                                    handleAuthorChange={({ target }) => setAuthor(target.value)}
-                                    handleUrlChange={({ target }) => setUrl(target.value)}
                                 />
                             </Togglable>
                         </div>
@@ -131,7 +117,7 @@ const App = () => {
             </div>
             <h2>blogs</h2>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
+                <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user} handleLike={handleLike}/>
             )}
         </div>
     )
