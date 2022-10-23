@@ -42,3 +42,13 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
 
     cy.contains(title)
 })
+
+Cypress.Commands.add('signUp', ({ name, username, password }) => {
+    const user = {
+        name: name,
+        username: username,
+        password: password
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user)
+    cy.visit('http://localhost:3000')
+})

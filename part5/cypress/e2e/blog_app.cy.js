@@ -2,13 +2,8 @@ describe('Blog app', function () {
 
     beforeEach(function () {
         cy.request('POST', 'http://localhost:3003/api/testing/reset')
-        const user = {
-            name: 'Aisha Rooble',
-            username: 'A-Rooble',
-            password: 'password123'
-        }
-        cy.request('POST', 'http://localhost:3003/api/users/', user)
-        cy.visit('http://localhost:3000')
+
+        cy.signUp({ name: 'Aisha Rooble', username: 'A-Rooble', password: 'password123' })
     })
 
     it('Login form is shown', function () {
@@ -53,12 +48,12 @@ describe('Blog app', function () {
         })
     })
 
-    describe('Like a blog', function () {
+    describe('Logged in & created blogs', function () {
         beforeEach(function () {
             cy.login({ username: 'A-Rooble', password: 'password123' })
 
             cy.createBlog({ title: 'First class tests', author: 'Robert C. Martin', url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll' })
-            cy.createBlog({ title: 'Canonical string reduction', author: 'Edsger W. Dijkstra', url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html' })
+            //cy.createBlog({ title: 'Canonical string reduction', author: 'Edsger W. Dijkstra', url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html' })
         })
 
         it('User can like a blog', function () {
@@ -66,6 +61,26 @@ describe('Blog app', function () {
             cy.get('#noOfLikes').contains('likes 0')
             cy.get('#likeButton').click()
             cy.get('#noOfLikes').contains('likes 1')
+        })
+
+        it('User can delete own blog', function () {
+            cy.contains('view').click()
+            cy.contains('First class tests').should('exist')
+            cy.contains('remove').click()
+            cy.contains('First class tests').should('not.exist')
+        })
+
+        it('User can\'t delete others\' blogs', function () {
+            cy.contains('view').click()
+            cy.contains('remove').should('exist')
+            cy.contains('Log Out').click()
+
+            cy.signUp({ name: 'Aisha Rooble', username: 'Aisha-R', password: 'password123' })
+
+            cy.login({ username: 'Aisha-R', password: 'password123' })
+
+            cy.contains('view').click()
+            cy.contains('remove').should('not.exist')
         })
 
     })
