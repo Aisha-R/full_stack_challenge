@@ -74,7 +74,7 @@ const App = () => {
 
         } catch (error) {
             console.log(error)
-            setMessage('unable to carry out operation')
+            setMessage(error.response.data.error)
             setTimeout(() => {
                 setMessage('')
             }, 5000)
