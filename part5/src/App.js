@@ -13,15 +13,21 @@ const App = () => {
     const [user, setUser] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [likes, setLikes] = useState(false)
 
     useEffect(() => {
-        blogService.getAll().then(returnedBlogs => {
-
-            let sorted = returnedBlogs.sort((b1, b2) => b1.likes - b2.likes)
-
-            setBlogs(sorted)
+        blogService.getAll().then(blogs => {
+            setBlogs(blogs)
+            setLikes(!likes)
         })
     }, [])
+
+    useEffect(() => {
+        const sorted = [...blogs].sort((b1, b2) => b2.likes - b1.likes)
+
+        setBlogs(sorted)
+
+    },[likes])
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -85,6 +91,7 @@ const App = () => {
         const response = await blogService.update(blog.id)
         const newBlogs = blogs.filter(current => current.id !== blog.id)
         setBlogs(newBlogs.concat(response))
+        setLikes(!likes)
     }
 
     return (

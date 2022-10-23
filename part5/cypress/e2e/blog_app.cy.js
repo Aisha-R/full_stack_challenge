@@ -53,13 +53,13 @@ describe('Blog app', function () {
             cy.login({ username: 'A-Rooble', password: 'password123' })
 
             cy.createBlog({ title: 'First class tests', author: 'Robert C. Martin', url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll' })
-            //cy.createBlog({ title: 'Canonical string reduction', author: 'Edsger W. Dijkstra', url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html' })
+            cy.createBlog({ title: 'Canonical string reduction', author: 'Edsger W. Dijkstra', url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html' })
         })
 
         it('User can like a blog', function () {
             cy.contains('view').click()
             cy.get('#noOfLikes').contains('likes 0')
-            cy.get('#likeButton').click()
+            cy.get('.likeButton').eq(0).click()
             cy.get('#noOfLikes').contains('likes 1')
         })
 
@@ -81,6 +81,16 @@ describe('Blog app', function () {
 
             cy.contains('view').click()
             cy.contains('remove').should('not.exist')
+        })
+
+        it('Blog sorted in order of most likes', function () {
+            cy.get('.blog').eq(1).contains('view').click()
+            cy.get('.likeButton').eq(1).click().wait(2000)
+            cy.get('.blog').eq(0).contains('Canonical string reduction')
+            cy.get('.blog').eq(1).contains('view').click()
+            cy.get('.likeButton').eq(1).click().wait(2000)
+            cy.get('.likeButton').eq(1).click().wait(2000)
+            cy.get('.blog').eq(0).contains('First class tests')
         })
 
     })
