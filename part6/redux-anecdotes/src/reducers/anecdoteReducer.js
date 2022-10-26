@@ -24,6 +24,8 @@ const reducer = (state = initialState, action) => {
     console.log('action', action)
     
     switch (action.type) {
+        case 'NEW_ANECDOTE':
+            return [...state, action.data]
         case 'INCREMENT':
             const id = action.data
             const anecdoteToChange = state.find(anecdote => anecdote.id === id)
