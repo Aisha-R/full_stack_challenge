@@ -4,11 +4,11 @@ const generateId = () =>
     Number((Math.random() * 1000000).toFixed(0))
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
-  const dispatch = useDispatch()
+    const anecdotes = useSelector(state => state.sort((anecdote1, anecdote2) => anecdote2.votes - anecdote1.votes))
+    const dispatch = useDispatch()
 
-  const vote = (id) => {
-    dispatch(addVote(id))
+    const vote = (id) => {
+        dispatch(addVote(id))
     }
 
     const addAnecdote = (event) => {
