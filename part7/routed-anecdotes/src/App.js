@@ -64,6 +64,12 @@ const CreateNew = (props) => {
     const content = useField('content')
     const author = useField('author')
     const info = useField('url')
+
+    const resetForm = () => {
+        content.reset()
+        author.reset()
+        info.reset()
+    }
     
     const navigate = useNavigate()
 
@@ -97,8 +103,9 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
-      </form>
+              <button>create</button>
+          </form>
+          <button onClick={() => resetForm()}>reset</button>
     </div>
   )
 
