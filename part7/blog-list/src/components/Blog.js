@@ -1,16 +1,6 @@
-import blogService from '../services/blogs'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, blogs, setBlogs, user, handleLike }) => {
-	const handleDelete = async () => {
-		if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-			await blogService.remove(blog.id)
-
-			const newBlogs = blogs.filter((current) => current.id !== blog.id)
-
-			setBlogs(newBlogs)
-		}
-	}
+const Blog = ({ blog, user, handleLike, handleDelete }) => {
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -37,7 +27,7 @@ const Blog = ({ blog, blogs, setBlogs, user, handleLike }) => {
 				</button>
 				<p style={pStyle}>{blog.user.name}</p>
 				{user && user.username === blog.user.username && (
-					<button onClick={handleDelete}>remove</button>
+					<button onClick={() => handleDelete(blog)}>remove</button>
 				)}
 			</Togglable>
 		</div>

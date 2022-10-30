@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { initializeBlogs, newBlog } from './reducers/blogReducer'
+import { initializeBlogs, newBlog, updateBlog, deleteBlog } from './reducers/blogReducer'
 import { createNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -14,22 +14,15 @@ const App = () => {
 	const [user, setUser] = useState(null)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	//const [likes, setLikes] = useState(false)
 
-	const blogs = useSelector(({ blogs }) => blogs)
+	const blogs = useSelector(({ blogs }) => [...blogs].sort((b1, b2) => b2.likes - b1.likes))
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		dispatch(initializeBlogs())
 	}, [dispatch])
-	/*
-	useEffect(() => {
-		const sorted = [...blogs].sort((b1, b2) => b2.likes - b1.likes)
 
-		setBlogs(sorted)
-	}, [likes])
-	*/
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
 		if (loggedUserJSON) {
@@ -78,14 +71,17 @@ const App = () => {
 			dispatch(createNotification(error.response.data.error, 5))
 		}
 	}
-	/*
+
 	const handleLike = async (blog) => {
-		const response = await blogService.update(blog.id)
-		const newBlogs = blogs.filter((current) => current.id !== blog.id)
-		setBlogs(newBlogs.concat(response))
-		setLikes(!likes)
+		dispatch(updateBlog(blog))
 	}
-	*/
+
+	const handleDelete = async (blog) => {
+		if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+			dispatch(deleteBlog(blog))
+		}
+	}
+
 	return (
 		<div>
 			<Notification />
@@ -121,10 +117,9 @@ const App = () => {
 				<Blog
 					key={blog.id}
 					blog={blog}
-					blogs={blogs}
-					//setBlogs={setBlogs}
 					user={user}
-					//handleLike={handleLike}
+					handleLike={handleLike}
+					handleDelete={handleDelete}
 				/>
 			))}
 		</div>
