@@ -1,5 +1,5 @@
 import { /*useState,*/ useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { /*login,*/ setUser } from './reducers/loginReducer'
 import { /*login,*/ initializeUsers } from './reducers/userReducer'/*
@@ -11,7 +11,35 @@ import BlogForm from './components/BlogForm'*/
 import Notification from './components/Notification'/*
 import Togglable from './components/Togglable'*/
 
-const Users = () => {
+const User = ({ userDetails, handleLogout }) => {
+
+	if (!userDetails) {
+		return null
+	}
+
+	const user = useSelector(({ user }) => user)
+
+	return (
+		<div>
+			<h2>blogs</h2>
+			{user &&
+				<>
+					<p>{user.name} logged in</p>
+					<button onClick={() => handleLogout()}>logout</button>
+				</>
+			}
+			<h2>{user.name}</h2>
+			<h3>added blogs</h3>
+			<ul>
+				{userDetails.blogs.map((blog) => (
+					<li key={blog.id}>{blog.title}</li>
+				))}
+			</ul>
+		</div>
+	)
+}
+
+const Users = ({ handleLogout }) => {
 
 	const user = useSelector(({ user }) => user)
 	const users = useSelector(({ users }) => users)
@@ -29,11 +57,6 @@ const Users = () => {
 			dispatch(setUser(user))
 		}
 	}, [])
-
-	const handleLogout = () => {
-		window.localStorage.removeItem('loggedBlogappUser')
-		dispatch(setUser(null))
-	}
 
 	return (
 		<div>
@@ -55,7 +78,7 @@ const Users = () => {
 				<tbody>
 					{users.map((user) => (
 						<tr key={user.id}>
-							<td>{user.name}</td>
+							<td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
 							<td>{user.blogs.length}</td>
 						</tr>
 					))}
@@ -66,6 +89,17 @@ const Users = () => {
 }
 
 const App = () => {
+
+	const dispatch = useDispatch()
+
+	const users = useSelector(({ users }) => users)
+
+	const match = useMatch('/users/:id')
+
+	const userDetails = match
+		? users.find(user => user.id === match.params.id)
+		: null
+
 	/*
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
@@ -124,10 +158,16 @@ const App = () => {
 		}
 	}
 	*/
+	const handleLogout = () => {
+		window.localStorage.removeItem('loggedBlogappUser')
+		dispatch(setUser(null))
+	}
+
 	return (
 		<div>
 			<Routes>
-				<Route path='/users' element={<Users />} />
+				<Route path='/users' element={<Users handleLogout={ handleLogout }/>} />
+				<Route path='/users/:id' element={<User userDetails={userDetails} handleLogout={handleLogout} />} />
 			</Routes>
 			<Notification />{/* }
 			<div>
