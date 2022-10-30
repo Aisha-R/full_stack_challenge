@@ -1,6 +1,9 @@
+import { useSelector } from 'react-redux'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, user, handleLike, handleDelete }) => {
+const Blog = ({ blog, handleLike, handleDelete }) => {
+
+	const user = useSelector(({ user }) => user)
 
 	const blogStyle = {
 		paddingTop: 10,

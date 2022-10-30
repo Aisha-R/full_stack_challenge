@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { login, setUser } from './reducers/userReducer'
 import { initializeBlogs, newBlog, updateBlog, deleteBlog } from './reducers/blogReducer'
 import { createNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
@@ -7,14 +8,13 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-import loginService from './services/login'
 
 const App = () => {
-	const [user, setUser] = useState(null)
+
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 
+	const user = useSelector(({ user }) => user)
 	const blogs = useSelector(({ blogs }) => [...blogs].sort((b1, b2) => b2.likes - b1.likes))
 
 	const dispatch = useDispatch()
@@ -34,16 +34,7 @@ const App = () => {
 	const handleLogin = async (event) => {
 		event.preventDefault()
 		try {
-			const user = await loginService.login({ username, password })
-
-			window.localStorage.setItem(
-				'loggedBlogappUser',
-				JSON.stringify(user)
-			)
-
-			blogService.setToken(user.token)
-
-			setUser(user)
+			dispatch(login({ username, password }))
 		} catch (error) {
 			dispatch(createNotification(error.response.data.error, 5))
 		}
@@ -54,7 +45,7 @@ const App = () => {
 
 	const handleLogout = () => {
 		window.localStorage.removeItem('loggedBlogappUser')
-		setUser(null)
+		dispatch(setUser(null))
 	}
 
 	const addBlog = async (returnedBlog) => {
@@ -89,7 +80,6 @@ const App = () => {
 				{user === null ? (
 					<LoginForm
 						handleLogin={handleLogin}
-						user={user}
 						username={username}
 						password={password}
 						handleUsernameChange={({ target }) =>
@@ -98,7 +88,6 @@ const App = () => {
 						handlePasswordChange={({ target }) =>
 							setPassword(target.value)
 						}
-						setUser={setUser}
 					/>
 				) : (
 					<div>
@@ -117,7 +106,6 @@ const App = () => {
 				<Blog
 					key={blog.id}
 					blog={blog}
-					user={user}
 					handleLike={handleLike}
 					handleDelete={handleDelete}
 				/>
