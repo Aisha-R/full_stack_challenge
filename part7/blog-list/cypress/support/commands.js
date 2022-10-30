@@ -24,31 +24,31 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("login", ({ username, password }) => {
-  cy.contains("login").click();
-  cy.get("#username").type(username);
-  cy.get("#password").type(password);
-  cy.get("#login-button").click();
-});
+Cypress.Commands.add('login', ({ username, password }) => {
+	cy.contains('login').click()
+	cy.get('#username').type(username)
+	cy.get('#password').type(password)
+	cy.get('#login-button').click()
+})
 
-Cypress.Commands.add("createBlog", ({ title, author, url }) => {
-  cy.contains("new blog").click();
+Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+	cy.contains('new blog').click()
 
-  cy.get("#title").type(title);
-  cy.get("#author").type(author);
-  cy.get("#url").type(url);
+	cy.get('#title').type(title)
+	cy.get('#author').type(author)
+	cy.get('#url').type(url)
 
-  cy.contains("create").click();
+	cy.contains('create').click()
 
-  cy.contains(title);
-});
+	cy.contains(title)
+})
 
-Cypress.Commands.add("signUp", ({ name, username, password }) => {
-  const user = {
-    name: name,
-    username: username,
-    password: password,
-  };
-  cy.request("POST", "http://localhost:3003/api/users/", user);
-  cy.visit("http://localhost:3000");
-});
+Cypress.Commands.add('signUp', ({ name, username, password }) => {
+	const user = {
+		name: name,
+		username: username,
+		password: password,
+	}
+	cy.request('POST', 'http://localhost:3003/api/users/', user)
+	cy.visit('http://localhost:3000')
+})
