@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { initializeBlogs, newBlog } from './reducers/blogReducer'
 import { createNotification } from './reducers/notificationReducer'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -10,27 +11,25 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-	const [blogs, setBlogs] = useState([])
 	const [user, setUser] = useState(null)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const [likes, setLikes] = useState(false)
+	//const [likes, setLikes] = useState(false)
+
+	const blogs = useSelector(({ blogs }) => blogs)
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		blogService.getAll().then((blogs) => {
-			setBlogs(blogs)
-			setLikes(!likes)
-		})
-	}, [])
-
+		dispatch(initializeBlogs())
+	}, [dispatch])
+	/*
 	useEffect(() => {
 		const sorted = [...blogs].sort((b1, b2) => b2.likes - b1.likes)
 
 		setBlogs(sorted)
 	}, [likes])
-
+	*/
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
 		if (loggedUserJSON) {
@@ -67,23 +66,26 @@ const App = () => {
 
 	const addBlog = async (returnedBlog) => {
 		try {
-			const blog = await blogService.create(returnedBlog)
-
-			setBlogs(blogs.concat(blog))
-			dispatch(createNotification(`a new blog ${blog.title} by ${blog.author} added`, 5))
+			dispatch(newBlog(returnedBlog))
+			dispatch(
+				createNotification(
+					`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+					5
+				)
+			)
 		} catch (error) {
 			console.log(error)
 			dispatch(createNotification(error.response.data.error, 5))
 		}
 	}
-
+	/*
 	const handleLike = async (blog) => {
 		const response = await blogService.update(blog.id)
 		const newBlogs = blogs.filter((current) => current.id !== blog.id)
 		setBlogs(newBlogs.concat(response))
 		setLikes(!likes)
 	}
-
+	*/
 	return (
 		<div>
 			<Notification />
@@ -120,9 +122,9 @@ const App = () => {
 					key={blog.id}
 					blog={blog}
 					blogs={blogs}
-					setBlogs={setBlogs}
+					//setBlogs={setBlogs}
 					user={user}
-					handleLike={handleLike}
+					//handleLike={handleLike}
 				/>
 			))}
 		</div>
