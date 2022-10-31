@@ -2,6 +2,11 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/loginReducer'
 import { Link } from 'react-router-dom'
 import LoginForm from '../components/LoginForm'
+import {
+	AppBar,
+	Toolbar,
+	Button
+} from '@mui/material'
 
 const Menu = ({ user }) => {
 
@@ -12,32 +17,34 @@ const Menu = ({ user }) => {
 		dispatch(setUser(null))
 	}
 
-	const padding = {
-		padding: 5
-	}
-
-	const loginStyle = {
-		paddingTop: 20,
-		backgroundColor: 'white'
-	}
-
 	return (
-		<div style={{ backgroundColor: 'lightGrey' } }>
-			<Link style={padding} to="/">blogs</Link>
-			<Link style={padding} to="/users">users</Link>
-			{user === null ? (
-				<div style={loginStyle}>
-					<LoginForm />
-				</div>
-			) : (
-				<>
-					{user.name} logged-in
-					<Link style={padding}>
-						<button style={padding} onClick={() => handleLogout()}>Log Out</button>
-					</Link>
-				</>
-			)}
-		</div>
+		<>
+			<div style={{ marginBottom: 25 }}>
+				<AppBar position="static">
+					<Toolbar>
+						<Button color="inherit" component={Link} to="/">
+							blogs
+						</Button>
+						<Button color="inherit" component={Link} to="/users">
+							users
+						</Button>
+						{user &&
+							(
+								<>
+									<Button color="inherit" component={Link} to={`/users/${user.id}`}>
+										Account
+									</Button>
+									<Button color="inherit" component={Link} onClick={() => handleLogout()}>
+										logout
+									</Button>
+								</>
+							)
+						}
+					</Toolbar>
+				</AppBar>
+			</div>
+			{!user && <LoginForm />}
+		</>
 	)
 }
 

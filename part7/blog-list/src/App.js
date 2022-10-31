@@ -10,6 +10,9 @@ import User from './components/User'
 import Users from './components/Users'
 import Menu from './components/Menu'
 import Notification from './components/Notification'
+import {
+	Container
+} from '@mui/material'
 
 const App = () => {
 
@@ -33,9 +36,9 @@ const App = () => {
 	const navigate = useNavigate()
 
 	return (
-		<div>
-			<Menu user={user} />
+		<Container>
 			<Notification />
+			<Menu user={user} />
 			<h2>blogs</h2>
 			<Routes>
 				<Route path='/' element={<Blogs blogs={blogs} />} />
@@ -43,7 +46,7 @@ const App = () => {
 				<Route path='/users/:id' element={<User users={users} />} />
 				<Route path='/blogs/:id' element={<Blog user={user} blogs={blogs} navigate={navigate} matchBlog={matchBlog} />} />
 			</Routes>
-		</div>
+		</Container>
 	)
 }
 
