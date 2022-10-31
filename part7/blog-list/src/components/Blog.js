@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 import {
 	TextField,
-	Button
+	Button,
+	Typography
 } from '@mui/material'
 
 const Blog = ({ user, blogs, navigate, matchBlog }) => {
@@ -40,13 +41,21 @@ const Blog = ({ user, blogs, navigate, matchBlog }) => {
 
 	return (
 		<div>
-			<h2>{blog.title}</h2>
-			<p>{blog.url}</p>
-			<p>{blog.likes} likes</p>
+			<Typography variant="h4">
+				{blog.title}
+			</Typography>
+			<Typography variant="h5">
+				{blog.url}
+			</Typography>
+			<Typography variant="h5">
+				{blog.likes} likes
+			</Typography>
 			<Button variant="contained" color="primary" className="likeButton" onClick={() => handleLike(blog)}>
 				like
 			</Button>
-			<p>added by {blog.author}</p>
+			<Typography variant="h5">
+				added by {blog.author}
+			</Typography>
 			{user &&
 				<Button variant="contained" color="primary" onClick={() => handleDelete(blog)}>
 					remove

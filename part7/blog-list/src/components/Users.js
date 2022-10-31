@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import {
+	Typography,
 	Table,
 	TableHead,
 	TableBody,
@@ -13,7 +14,9 @@ const Users = ({ users }) => {
 
 	return (
 		<div>
-			<h2>Users</h2>
+			<Typography variant="h3">
+				users
+			</Typography>
 			<TableContainer component={Paper}>
 				<Table>
 					<TableHead>

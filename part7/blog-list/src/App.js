@@ -11,7 +11,8 @@ import Users from './components/Users'
 import Menu from './components/Menu'
 import Notification from './components/Notification'
 import {
-	Container
+	Container,
+	Typography
 } from '@mui/material'
 
 const App = () => {
@@ -39,7 +40,9 @@ const App = () => {
 		<Container>
 			<Notification />
 			<Menu user={user} />
-			<h2>blogs</h2>
+			<Typography variant="h3">
+				blogs
+			</Typography>
 			<Routes>
 				<Route path='/' element={<Blogs blogs={blogs} />} />
 				<Route path='/users' element={<Users users={users}/>} />

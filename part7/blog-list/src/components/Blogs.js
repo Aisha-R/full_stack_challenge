@@ -5,6 +5,7 @@ import Togglable from './Togglable'
 import BlogForm from '../components/BlogForm'
 import { Link } from 'react-router-dom'
 import {
+	Typography,
 	Table,
 	TableBody,
 	TableCell,
@@ -39,7 +40,9 @@ const Blogs = ({ blogs }) => {
 					<BlogForm addBlog={addBlog} />
 				</Togglable>
 			</div>
-			<h2>blogs</h2>
+			<Typography variant="h3">
+				blogs
+			</Typography>
 			<TableContainer component={Paper}>
 				<Table>
 					<TableBody>
