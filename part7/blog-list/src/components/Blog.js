@@ -1,38 +1,43 @@
-import { useSelector } from 'react-redux'
-import Togglable from './Togglable'
+import { useDispatch } from 'react-redux'
+import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, handleLike, handleDelete }) => {
+const Blog = ({ user, blogs, navigate, matchBlog }) => {
 
-	const user = useSelector(({ user }) => user)
+	const blog = matchBlog
+		? blogs.find(blog => blog.id === matchBlog.params.id)
+		: null
 
-	const blogStyle = {
-		paddingTop: 10,
-		paddingLeft: 2,
-		border: 'solid',
-		borderWidth: 1,
-		marginBottom: 5,
+	if (!blog) {
+		return null
 	}
 
-	const pStyle = { margin: 5 }
+	const dispatch = useDispatch()
+
+	const handleLike = async (blog) => {
+		dispatch(updateBlog(blog))
+	}
+
+	const handleDelete = async (blog) => {
+		if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+			dispatch(deleteBlog(blog))
+			navigate('/')
+		}
+	}
 
 	return (
-		<div style={blogStyle} className="blog">
-			<p style={pStyle}>
-				{blog.title} {blog.author}
-			</p>
-			<Togglable buttonLabel="view">
-				<p style={pStyle}>{blog.url}</p>
-				<p style={pStyle} id="noOfLikes">
-					likes {blog.likes}
-				</p>{' '}
-				<button className="likeButton" onClick={() => handleLike(blog)}>
-					like
+		<div>
+			<h2>{blog.title}</h2>
+			<p>{blog.url}</p>
+			<p>{blog.likes} likes</p>
+			<button className="likeButton" onClick={() => handleLike(blog)}>
+				like
+			</button>
+			<p>added by {blog.author}</p>
+			{user &&
+				<button onClick={() => handleDelete(blog)}>
+					remove
 				</button>
-				<p style={pStyle}>{blog.user.name}</p>
-				{user && user.username === blog.user.username && (
-					<button onClick={() => handleDelete(blog)}>remove</button>
-				)}
-			</Togglable>
+			}
 		</div>
 	)
 }
