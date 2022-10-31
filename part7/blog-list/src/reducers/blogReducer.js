@@ -38,7 +38,7 @@ export const newBlog = (content) => {
 
 export const updateBlog = (blog) => {
 	return async (dispatch) => {
-		const updatedBlog = await blogService.update(blog.id)
+		const updatedBlog = await blogService.update(blog.id, blog)
 		dispatch(amendBlog(updatedBlog))
 	}
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 
@@ -14,7 +15,8 @@ const Blog = ({ user, blogs, navigate, matchBlog }) => {
 	const dispatch = useDispatch()
 
 	const handleLike = async (blog) => {
-		dispatch(updateBlog(blog))
+		const updatedBlog = { ...blog, likes: blog.likes + 1 }
+		dispatch(updateBlog(updatedBlog))
 	}
 
 	const handleDelete = async (blog) => {
@@ -22,6 +24,14 @@ const Blog = ({ user, blogs, navigate, matchBlog }) => {
 			dispatch(deleteBlog(blog))
 			navigate('/')
 		}
+	}
+
+	const [ comment, setComment ] = useState('')
+
+	const handleComment = () => {
+		const updatedBlog = { ...blog, comments: blog.comments.concat(comment) }
+		dispatch(updateBlog(updatedBlog))
+		setComment('')
 	}
 
 	return (
@@ -39,6 +49,13 @@ const Blog = ({ user, blogs, navigate, matchBlog }) => {
 				</button>
 			}
 			<h3>comments</h3>
+			<input
+				type="text"
+				name="Comment"
+				value={comment}
+				onChange={({ target }) => setComment(target.value)}
+			/>
+			<button onClick={() => handleComment()}>add comment</button>
 			<ul>
 				{blog.comments.map((comment, index) =>
 					<li key={index}>{comment}</li>
