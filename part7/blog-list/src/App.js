@@ -8,7 +8,7 @@ import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import User from './components/User'
 import Users from './components/Users'
-import LoginHandler from './components/LoginHandler'
+import Menu from './components/Menu'
 import Notification from './components/Notification'
 
 const App = () => {
@@ -34,9 +34,9 @@ const App = () => {
 
 	return (
 		<div>
+			<Menu user={user} />
 			<Notification />
 			<h2>blogs</h2>
-			<LoginHandler user={user} />
 			<Routes>
 				<Route path='/' element={<Blogs blogs={blogs} />} />
 				<Route path='/users' element={<Users users={users}/>} />
