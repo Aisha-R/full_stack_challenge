@@ -30,8 +30,8 @@ const calculateBmi = (height: number, weight: number): string => {
         return 'overweight';
     } else {
         return 'obese';
-    } 
-}
+    }
+};
 /*
 try {
     const { value1, value2 } = parseArguments(process.argv);

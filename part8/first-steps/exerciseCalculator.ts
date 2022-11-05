@@ -15,7 +15,7 @@ const parseArguments = (args: Array<string>): ExerciseValues => {
 
         arr2.forEach(entry => {
             if (isNaN(entry)) {
-                notANumber = true
+                notANumber = true;
             }
         });
 
@@ -25,12 +25,12 @@ const parseArguments = (args: Array<string>): ExerciseValues => {
             return {
                 value1: Number(args[2]),
                 value2: arr2
-            }
+            };
         }
     } else {
         throw new Error('Provided values were not numbers!');
     }
-}
+};
 
 interface Result {
     periodLength: number;
@@ -47,22 +47,22 @@ const calculateExercises = (actual: Array<number>, target: number): Result => {
     const trainingDays = actual.filter(day => day > 0);
 
     const sum = actual.reduce((current, next) => current + next, 0);
-    
+
     let rating;
     let ratingDescription;
 
     if (actual.length === trainingDays.length) {
         rating = 5;
-        ratingDescription = 'great job'
+        ratingDescription = 'great job';
     } else if (actual.length > (trainingDays.length * 0.5)) {
         rating = 3;
-        ratingDescription = 'not too bad but could be better'
+        ratingDescription = 'not too bad but could be better';
     } else if (actual.length > 0) {
         rating = 1;
-        ratingDescription = 'must have had a busy couple of days; pick up the pace for the upcoming week'
+        ratingDescription = 'must have had a busy couple of days; pick up the pace for the upcoming week';
     } else {
         rating = 0;
-        ratingDescription = 'don\'t give up; try again next week'
+        ratingDescription = 'don\'t give up; try again next week';
     }
 
     return {
@@ -74,13 +74,13 @@ const calculateExercises = (actual: Array<number>, target: number): Result => {
         target: target,
         average: sum / actual.length
     };
-}
+};
 
 try {
     const { value1, value2 } = parseArguments(process.argv);
     console.log(calculateExercises(value2, value1));
 } catch (error: unknown) {
-    let errorMessage = 'Something bad happened.'
+    let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
         errorMessage += ' Error: ' + error.message;
     }
