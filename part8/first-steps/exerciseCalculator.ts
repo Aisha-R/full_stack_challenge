@@ -1,3 +1,4 @@
+/*
 interface ExerciseValues {
     value1: number;
     value2: Array<number>;
@@ -31,7 +32,7 @@ const parseArguments = (args: Array<string>): ExerciseValues => {
         throw new Error('Provided values were not numbers!');
     }
 };
-
+*/
 interface Result {
     periodLength: number;
     trainingDays: number;
@@ -75,7 +76,7 @@ const calculateExercises = (actual: Array<number>, target: number): Result => {
         average: sum / actual.length
     };
 };
-
+/*
 try {
     const { value1, value2 } = parseArguments(process.argv);
     console.log(calculateExercises(value2, value1));
@@ -86,3 +87,6 @@ try {
     }
     console.log(errorMessage);
 }
+*/
+
+export default calculateExercises;
