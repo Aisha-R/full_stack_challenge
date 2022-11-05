@@ -1,3 +1,4 @@
+/*
 interface BmiValues {
     value1: number;
     value2: number;
@@ -16,7 +17,7 @@ const parseArguments = (args: Array<string>): BmiValues => {
         throw new Error('Provided values were not numbers!');
     }
 }
-
+*/
 const calculateBmi = (height: number, weight: number): string => {
     const inMeters = height / 100;
     const bmi = weight / (inMeters ** 2);
@@ -31,7 +32,7 @@ const calculateBmi = (height: number, weight: number): string => {
         return 'obese';
     } 
 }
-
+/*
 try {
     const { value1, value2 } = parseArguments(process.argv);
     console.log(calculateBmi(value1, value2));
@@ -42,3 +43,5 @@ try {
     }
     console.log(errorMessage);
 }
+*/
+export default calculateBmi;
