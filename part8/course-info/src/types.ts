@@ -1,4 +1,31 @@
-export interface CoursePartsProps {
-    name: string,
-    exerciseCount: number
+export interface CoursePartBase {
+    name: string;
+    exerciseCount: number;
+    type: string;
 }
+
+interface CourseDescriptionPart extends CoursePartBase {
+    type: string;
+    description: string;
+}
+
+interface CourseNormalPart extends CourseDescriptionPart {
+    type: "normal";
+}
+
+interface CourseProjectPart extends CoursePartBase {
+    type: "groupProject";
+    groupProjectCount: number;
+}
+
+interface CourseSubmissionPart extends CourseDescriptionPart {
+    type: "submission";
+    exerciseSubmissionLink: string;
+}
+
+interface CourseSpecialPart extends CourseDescriptionPart {
+    type: "special";
+    requirements: Array<string>;
+}
+
+export type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart | CourseSpecialPart;

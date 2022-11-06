@@ -1,6 +1,6 @@
-import { CoursePartsProps } from '../types'
+import { CoursePartBase } from '../types'
 
-const Total = ({ courseParts }: { courseParts: Array<CoursePartsProps> }): JSX.Element => {
+const Total = ({ courseParts }: { courseParts: Array<CoursePartBase> }): JSX.Element => {
     return (
         <>
             <p>
