@@ -12,14 +12,13 @@ const PatientPage = () => {
 
     const { id } = useParams<{ id: string }>();
 
-    const [{ patients }, dispatch] = useStateValue();
-   
+    const [{ patients, diagnoses }, dispatch] = useStateValue();
+    
     const patient = Object.values(patients).find((patient: Patient) => patient.id === id);
 
     React.useEffect(() => {
 
         const fetchPatient = async () => {
-
             try {
                 if (id) {
                     const { data: patientFromApi } = await axios.get<Patient>(
@@ -33,7 +32,6 @@ const PatientPage = () => {
         };
 
         if (Object.keys(patients).length === 0 || patient && !patient.ssn) {
-
             void fetchPatient();
         }
 
@@ -55,7 +53,9 @@ const PatientPage = () => {
     };
     
     const renderCodes = (codes: Array<Diagnosis['code']> | undefined) => {
-        return <ul>{codes && codes.map(code => <li key={code}>{code}</li>)}</ul>;
+        const diagnosisCodes = Object.values(diagnoses).filter((diagnosis: Diagnosis) => codes && codes.includes(diagnosis.code));
+        
+        return <ul>{diagnosisCodes && diagnosisCodes.map(diagnosis => <li key={diagnosis.code}>{diagnosis.code} {diagnosis.name}</li>)}</ul>;
     };
   
     return (

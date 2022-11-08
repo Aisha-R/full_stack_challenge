@@ -1,5 +1,5 @@
 import { State } from "./state";
-import { Patient } from "../types";
+import { Patient, Diagnosis } from "../types";
 
 export type Action =
   | {
@@ -13,6 +13,10 @@ export type Action =
   | {
       type: "UPDATE_PATIENT";
       payload: Patient;
+  }
+  | {
+      type: "SET_DIAGNOSES";
+      payload: Diagnosis[];
   };
 
 export const reducer = (state: State, action: Action): State => {
@@ -26,6 +30,9 @@ export const reducer = (state: State, action: Action): State => {
             {}
           ),
           ...state.patients
+        },
+        diagnoses: {
+          ...state.diagnoses
         }
       };
     case "ADD_PATIENT":
@@ -34,15 +41,35 @@ export const reducer = (state: State, action: Action): State => {
         patients: {
           ...state.patients,
           [action.payload.id]: action.payload
+        },
+        diagnoses: {
+          ...state.diagnoses
         }
       };
-      case "UPDATE_PATIENT":
+    case "UPDATE_PATIENT":
           const newPatients = Object.values(state.patients).filter((patient: Patient) => patient.id !== action.payload.id);
       return {
         ...state,
         patients: {
-            ...newPatients.reduce((memo, patient) => ({ ...memo, [patient.id]: patient }), {}),
-            [action.payload.id]: action.payload
+          ...newPatients.reduce((memo, patient) => ({ ...memo, [patient.id]: patient }), {}),
+          [action.payload.id]: action.payload
+        },
+        diagnoses: {
+          ...state.diagnoses
+        }
+      };
+    case "SET_DIAGNOSES":
+      return {
+        ...state,
+        patients: {
+          ...state.patients
+        },
+        diagnoses: {
+          ...action.payload.reduce(
+            (memo, diagnosis) => ({ ...memo, [diagnosis.code]: diagnosis }),
+            {}
+          ),
+          ...state.diagnoses
         }
       };
     default:
@@ -67,6 +94,13 @@ export const addPatient = (data: Patient): Action => {
 export const updatePatient = (data: Patient): Action => {
     return {
         type: "UPDATE_PATIENT",
+        payload: data
+    };
+};
+
+export const setDiagnoses = (data: Diagnosis[]): Action => {
+    return {
+        type: 'SET_DIAGNOSES',
         payload: data
     };
 };
