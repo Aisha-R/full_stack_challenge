@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useStateValue, updatePatient } from "../state";
-import { Patient } from "../types";
+import { Patient, Diagnosis } from "../types";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import React from "react";
@@ -53,7 +53,11 @@ const PatientPage = () => {
             }
         }
     };
-
+    
+    const renderCodes = (codes: Array<Diagnosis['code']> | undefined) => {
+        return <ul>{codes && codes.map(code => <li key={code}>{code}</li>)}</ul>;
+    };
+  
     return (
         <>
             {patient &&
@@ -61,6 +65,13 @@ const PatientPage = () => {
                     <h2>{patient.name} {renderGender()}</h2>
                     <p>ssn: {patient.ssn}</p>
                     <p>occupation: {patient.occupation}</p>
+                    <h3>entries</h3>
+                    {patient.entries && patient.entries.map(entry =>
+                        <div key={entry.id}>
+                            <p>{entry.date} {entry.description}</p>
+                            {renderCodes(entry.diagnosisCodes)}
+                        </div>
+                    )}
                 </>
             }
         </>
