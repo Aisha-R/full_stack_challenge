@@ -1,11 +1,11 @@
 import patientsData from '../../data/patients';
 import { v1 as uuid } from 'uuid';
 
-import { PatientEntry, NewPatientEntry } from '../types';
-import toNewPatientEntry from "../utils";
+import { PatientEntry, NewPatientEntry, Entry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from '../types';
+import utils from "../utils";
 
-const patients: Array<PatientEntry> = patientsData.map(obj => {
-    const object = toNewPatientEntry(obj) as PatientEntry;
+let patients: Array<PatientEntry> = patientsData.map(obj => {
+    const object = utils.toNewPatientEntry(obj) as PatientEntry;
     object.id = obj.id;
     return object;
 });
@@ -42,9 +42,33 @@ const getEntry = (id: string): PatientEntry | undefined => {
     return patient;
 };
 
+const addEntry = (patient: PatientEntry, entry: Entry): PatientEntry | null => {
+
+    const object = utils.toNewEntry(entry) as Omit<HealthCheckEntry, 'id'> | Omit<HospitalEntry, 'id'> | Omit<OccupationalHealthcareEntry, 'id'>;
+    
+    if (!object) {
+        return null;
+    }
+
+    const addedEntry = {
+        ...patient,
+        entries: patient.entries.concat({ ...object, id: uuid() })
+    };
+    
+    patients = patients.map(listed => {
+        if (listed.id === patient.id) {
+            return addedEntry;
+        }
+        return listed;
+    });
+  
+    return addedEntry;
+};
+
 export default {
     getEntries,
     getNonSensitiveEntries,
     addPatient,
-    getEntry
+    getEntry,
+    addEntry
 };

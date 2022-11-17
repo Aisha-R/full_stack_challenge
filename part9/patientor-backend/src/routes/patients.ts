@@ -1,5 +1,5 @@
 import patientService from '../services/patientService';
-import toNewPatientEntry from '../utils';
+import utils from '../utils';
 
 import express from 'express';
 
@@ -11,7 +11,8 @@ router.get('/', (_req, res) => {
 
 router.post('/', (req, res) => {
     try {
-        const newPatientEntry = toNewPatientEntry(req.body);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const newPatientEntry = utils.toNewPatientEntry(req.body);
         const addedEntry = patientService.addPatient(newPatientEntry);
         res.json(addedEntry);
     } catch (error: unknown) {
@@ -32,6 +33,22 @@ router.get('/:id', (req, res) => {
         res.sendStatus(404);
     }
    
+});
+
+router.post('/:id/entries', (req, res) => {
+    const patient = patientService.getEntry(req.params.id);
+    
+    if (patient) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const modifiedPatient = patientService.addEntry(patient, req.body);
+        if (modifiedPatient) {
+            res.send(modifiedPatient);
+        } else {
+            res.sendStatus(400);
+        }
+    } else {
+        res.sendStatus(404);
+    }
 });
 
 export default router;
