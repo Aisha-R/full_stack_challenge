@@ -80,7 +80,7 @@ const EntryDetail = ({ entry }: { entry: Entry }): JSX.Element => {
 
         return <ul>{diagnosisCodes && diagnosisCodes.map(diagnosis => <li key={diagnosis.code}>{diagnosis.code} {diagnosis.name}</li>)}</ul>;
     };
-
+    
     return (
         <div style={{ border: "solid", margin: 15, marginLeft: 0, padding: 10 }}>
             <p>{entry.date}</p>

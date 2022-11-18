@@ -106,20 +106,20 @@ const parseEmployerName = (employerName: unknown): string => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isHealthCheckRating = (param: any): param is string => {
+const isHealthCheckRating = (param: any): param is number => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.keys(HealthCheckRating).includes(param);
+    return Object.keys(HealthCheckRating).includes(HealthCheckRating[param as number]);
 };
 
 const parseHealthCheckRating = (healthCheckRating: unknown): HealthCheckRating => {
-
-    if (healthCheckRating && isHealthCheckRating(healthCheckRating)) {
+    
+    if (/*healthCheckRating && */isHealthCheckRating(healthCheckRating)) {
         switch (healthCheckRating) {
-            case "Healthy":
+            case 0:
                 return HealthCheckRating.Healthy;
-            case "LowRisk":
+            case 1:
                 return HealthCheckRating.LowRisk;
-            case "HighRisk":
+            case 2:
                 return HealthCheckRating.HighRisk;
             default:
                 return HealthCheckRating.CriticalRisk;
@@ -136,6 +136,7 @@ const isDiagnosisCodes = (param: any): param is Array<DiagnosisEntry['code']> =>
 };
 
 const parseDiagnosisCodes = (diagnosisCodes: unknown): Array<DiagnosisEntry['code']> => {
+    
     if (!diagnosisCodes || !isDiagnosisCodes(diagnosisCodes)) {
         throw new Error('Incorrect or missing diagnosisCodes');
     }
@@ -215,10 +216,9 @@ const parseOccupationalHealthcare = (type: unknown): Type.OccupationalHealthcare
     return type as Type.OccupationalHealthcare;
 };
 
-//type EntryFields = { description: unknown, date: unknown, specialist: unknown, diagnosisCodes: unknown, type: unknown, healthCheckRating: unknown, discharge: unknown, employerName: unknown, sickLeave: unknown };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toNewEntry = (object: any): Omit<HealthCheckEntry, 'id'> | Omit<HospitalEntry, 'id'> | Omit<OccupationalHealthcareEntry, 'id'> | undefined => {
-    
+   
     switch (object.type) {
         case "HealthCheck":
 
