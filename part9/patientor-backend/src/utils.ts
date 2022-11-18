@@ -165,7 +165,12 @@ const parseDischarge = ({ criteria, date }: DischargeFields): Discharge => {
 
 type SickLeaveFields = { startDate: unknown, endDate: unknown };
 
-const parseSickLeave = ({ startDate, endDate }: SickLeaveFields): SickLeave => {
+const parseSickLeave = ({ startDate, endDate }: SickLeaveFields): SickLeave | undefined => {
+
+    if (!startDate || !endDate) {
+        return undefined;
+    }
+
     const newSickLeave: SickLeave = {
         startDate: parseDate(startDate),
         endDate: parseDate(endDate)
@@ -257,7 +262,7 @@ const toNewEntry = (object: any): Omit<HealthCheckEntry, 'id'> | Omit<HospitalEn
                 specialist: parseSpecialist(object.specialist),
                 type: parseOccupationalHealthcare(object.type),
                 employerName: parseEmployerName(object.employerName),
-                sickLeave: parseSickLeave(object.sickLeave as SickLeave)
+                sickLeave: parseSickLeave({startDate: object.startDate, endDate: object.endDate} as SickLeave)
             };
             
             if (object.diagnosisCodes) {

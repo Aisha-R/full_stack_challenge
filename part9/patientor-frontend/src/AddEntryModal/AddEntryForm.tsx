@@ -3,10 +3,10 @@ import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
 import { TextField, SelectField, DiagnosisSelection, HealthCheckRatingOption, TypeOption } from "../AddPatientModal/FormField";
-import { Entry, HealthCheckRating } from "../types";
+import { HealthCheckRating, Diagnosis } from "../types";
 import { useStateValue } from "../state";
 
-export type EntryFormValues = Omit<Entry, "id">;
+export type EntryFormValues = { description: string; date: string; specialist: string; diagnosisCodes: Array<Diagnosis['code']>; type: string; healthCheckRating: HealthCheckRating; employerName: string; startDate: string, endDate: string };
 
 interface Props {
     onSubmit: (values: EntryFormValues) => void;
@@ -37,7 +37,11 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 date: "",
                 specialist: "",
                 diagnosisCodes: [],
-                type: "HealthCheck"
+                type: "HealthCheck",
+                healthCheckRating: HealthCheckRating.Healthy,
+                employerName: "",
+                startDate: "",
+                endDate: ""
             }}
             onSubmit={onSubmit}
             validate={(values) => {
@@ -55,10 +59,47 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 if (!values.type) {
                     errors.type = requiredError;
                 }
+                if (values.type === "HealthCheck" && !values.healthCheckRating) {
+                    errors.healthCheckRating = requiredError;
+                }
+                if (values.type === "OccupationalHealthcare" && !values.employerName) {
+                    errors.employerName = requiredError;
+                }
                 return errors;
             }}
         >
-            {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
+            {({ isValid, dirty, setFieldValue, setFieldTouched, values }) => {
+
+                const renderType = () => {
+                    switch (values.type) {
+                        case "HealthCheck":
+                            return <SelectField label="HealthCheckRating" name="healthCheckRating" options={healthCheckRatingOptions} />;
+                        case "OccupationalHealthcare":
+                            return (
+                                <>
+                                    <Field
+                                        label="Employer Name"
+                                        placeholder="Employer Name"
+                                        name="employerName"
+                                        component={TextField}
+                                    />
+                                    <Field
+                                        label="Sick Leave (Start Date)"
+                                        placeholder="YYYY-MM-DD"
+                                        name="startDate"
+                                        component={TextField}
+                                    />
+                                    <Field
+                                        label="Sick Leave (End Date)"
+                                        placeholder="YYYY-MM-DD"
+                                        name="endDate"
+                                        component={TextField}
+                                    />
+                                </>
+                            );
+                    }
+                };
+              
                 return (
                     <Form className="form ui">
                         <Field
@@ -80,11 +121,11 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                             name="specialist"
                             component={TextField}
                         />
-                        <SelectField label="HealthCheckRating" name="healthCheckRating" options={healthCheckRatingOptions} />
                         <DiagnosisSelection
                             setFieldValue={setFieldValue}
                             setFieldTouched={setFieldTouched}
                             diagnoses={Object.values(diagnoses)} />
+                        {renderType()}
                         <Grid>
                             <Grid item>
                                 <Button
