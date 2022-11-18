@@ -6,7 +6,8 @@ import { TextField, SelectField, DiagnosisSelection, HealthCheckRatingOption, Ty
 import { HealthCheckRating, Diagnosis } from "../types";
 import { useStateValue } from "../state";
 
-export type EntryFormValues = { description: string; date: string; specialist: string; diagnosisCodes: Array<Diagnosis['code']>; type: string; healthCheckRating: HealthCheckRating; employerName: string; startDate: string, endDate: string };
+export type EntryFormValues = {
+    description: string; date: string; specialist: string; diagnosisCodes: Array<Diagnosis['code']>; type: string; healthCheckRating: HealthCheckRating; employerName: string; startDate: string, endDate: string, dischargeDate: string; criteria: string; };
 
 interface Props {
     onSubmit: (values: EntryFormValues) => void;
@@ -41,7 +42,9 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 healthCheckRating: HealthCheckRating.Healthy,
                 employerName: "",
                 startDate: "",
-                endDate: ""
+                endDate: "",
+                dischargeDate: "",
+                criteria: ""
             }}
             onSubmit={onSubmit}
             validate={(values) => {
@@ -64,6 +67,12 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 }
                 if (values.type === "OccupationalHealthcare" && !values.employerName) {
                     errors.employerName = requiredError;
+                }
+                if (values.type === "Hospital" && !values.dischargeDate) {
+                    errors.dischargeDate = requiredError;
+                }
+                if (values.type === "Hospital" && !values.criteria) {
+                    errors.criteria = requiredError;
                 }
                 return errors;
             }}
@@ -93,6 +102,23 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                                         label="Sick Leave (End Date)"
                                         placeholder="YYYY-MM-DD"
                                         name="endDate"
+                                        component={TextField}
+                                    />
+                                </>
+                            );
+                        case "Hospital":
+                            return (
+                                <>
+                                    <Field
+                                        label="Criteria"
+                                        placeholder="Criteria"
+                                        name="criteria"
+                                        component={TextField}
+                                    />
+                                    <Field
+                                        label="Dishcharge Date"
+                                        placeholder="YYYY-MM-DD"
+                                        name="dischargeDate"
                                         component={TextField}
                                     />
                                 </>

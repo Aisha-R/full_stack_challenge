@@ -247,7 +247,7 @@ const toNewEntry = (object: any): Omit<HealthCheckEntry, 'id'> | Omit<HospitalEn
                 date: parseDate(object.date),
                 specialist: parseSpecialist(object.specialist),
                 type: parseHospital(object.type),
-                discharge: parseDischarge(object.discharge as DischargeFields)
+                discharge: parseDischarge({ criteria: object.criteria, date: object.dischargeDate } as DischargeFields)
             };
 
             if (object.diagnosisCodes) {
@@ -262,7 +262,7 @@ const toNewEntry = (object: any): Omit<HealthCheckEntry, 'id'> | Omit<HospitalEn
                 specialist: parseSpecialist(object.specialist),
                 type: parseOccupationalHealthcare(object.type),
                 employerName: parseEmployerName(object.employerName),
-                sickLeave: parseSickLeave({startDate: object.startDate, endDate: object.endDate} as SickLeave)
+                sickLeave: parseSickLeave({startDate: object.startDate as string, endDate: object.endDate as string} as SickLeave)
             };
             
             if (object.diagnosisCodes) {
