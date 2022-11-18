@@ -37,10 +37,26 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 date: "",
                 specialist: "",
                 diagnosisCodes: [],
-                type: "HealthCheck",
-                healthCheckRating: HealthCheckRating.Healthy,
+                type: "HealthCheck"
             }}
             onSubmit={onSubmit}
+            validate={(values) => {
+                const requiredError = "Field is required";
+                const errors: { [field: string]: string } = {};
+                if (!values.description) {
+                    errors.description = requiredError;
+                }
+                if (!values.date) {
+                    errors.date = requiredError;
+                }
+                if (!values.specialist) {
+                    errors.specialist = requiredError;
+                }
+                if (!values.type) {
+                    errors.type = requiredError;
+                }
+                return errors;
+            }}
         >
             {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
                 return (

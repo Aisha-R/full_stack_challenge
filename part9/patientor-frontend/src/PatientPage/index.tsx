@@ -21,11 +21,13 @@ const PatientPage = () => {
     const patient = Object.values(patients).find((patient: Patient) => patient.id === id);
    
     const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string>();
 
     const openModal = (): void => setModalOpen(true);
 
     const closeModal = (): void => {
         setModalOpen(false);
+        setError(undefined);
     };
 
     const submitNewEntry = async (values: EntryFormValues) => {
@@ -43,8 +45,10 @@ const PatientPage = () => {
         } catch (e: unknown) {
             if (axios.isAxiosError(e)) {
                 console.error(e?.response?.data || "Unrecognized axios error");
+                setError(String(e?.response?.data?.error) || "Unrecognized axios error");
             } else {
                 console.error("Unknown error", e);
+                setError("Unknown error");
             }
         }
     };
@@ -99,6 +103,7 @@ const PatientPage = () => {
                     <AddEntryModal
                         modalOpen={modalOpen}
                         onSubmit={submitNewEntry}
+                        error={error}
                         onClose={closeModal}
                     />
                     <Button variant="contained" onClick={() => openModal()}>
